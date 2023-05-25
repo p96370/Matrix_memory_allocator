@@ -1,0 +1,90 @@
+##### Copyright 2022 Elena Dulgheru 314CA (elenadulgheru03@gmail.com@gmail.com)
+# README check
+    Problema mea contine 2 fisiere de tip .c: my_octave.c si strassen.c si un
+fisier de tip .h: functions.h. In my_octave.c am tratat toate operatiile, in 
+afara de bonus, iar in strassen.c am calculat matricea folosind algoritmul cerut.
+In functions.h am declarat toate functiile si structurile ajutatoare folosite 
+la algoritmul lui Strassen si define MOD, ce ma ajuta si in my_octave.c .
+    In continuare voi explica mai pe larg ce face programul:
+    In main am declarat variabila v, care este un vector de matrice in care retin
+matricele citite, cu tot cu modificarile efectuate asupra lor si vectorii line
+si col in care retin dimensiunile fiecarei matrice: numarul de linii, respectiv 
+de coloane, si mai declar un sir de caractere com[], in care retin literele 
+corespunzatoare fiecarei operatii posibile.
+    Comanda 'L': Aceasta comanda isi propune alocarea in memorie a unei noi 
+matrice. Se realoca spatiu in vectorul v, in line si in col. Ulterior se apeleaza
+functia alloc_matrix() care aloca o noua matrice pe noua pozitie alocata in v,
+actualizeaza dimensiunea vectorului v si apeleaza la randul ei functia read_matrix()
+in care se citeste matricea data si se retine in memorie.
+    Comanda 'D': Se afiseaza dimensiunea matricei de la indicele citit, apelandu-se
+functia print_dimension() sau mesajul corespunzator, daca indicele este invalid.
+    Comanda 'P': Se afiseaza matricea de la indicele citit, apelandu-se functia
+print_matrix() sau mesajul corespunzator, daca indicele este invalid.
+    Comanda 'C': Se citesc indexul matricei pentru care se vrea redimensionare
+si pozitiile elementelor noii matrice din cea veche. Daca indexul este invalid,
+se apeleaza functia read_values_C unde doar se citesc valorile si se afiseaza 
+mesajul corespuzator, altfel se apeleaza functia redimension_matrix() unde se 
+realoca matricea de la indexul dat. Pasii vor fi: se citesc valorile si se retin
+in doi noi vectori new_lines si new_cols si se face realocarea elementelor matricei
+dupa regula data, dupa care se elibereaza din memorie matricea veche, se
+actualizeaza dimensiunile matricei curente si se inlocuieste matricea initiala
+cu cea noua.
+    Comanda 'M': Se inmultesc matricele de la indecsii cititi daca acestia sunt
+valizi, altfel se apeleaza functia check_multiply(). Daca sunt valizi si se 
+indeplinesc conditiile matematice, se urmeaza pasii: se apeleaza functia 
+mat_multi() care returneaza produsul cerut, pe care il pun in variabila prod, 
+realoc memorie pentru v, line si col si copiez atat matricea produs cat si 
+dimensiunile sale in vectorul v.
+    Comanda 'O': Se apeleaza functia sort_matrix() care sorteaza matricele
+in functie de suma. Vectorul se sume se aloca doar in aceasta functie si se
+initializeaza apeland functia sum_matrix() care calculeaza suma unei matrice.
+La final vectorul de sume se elibereaza din memorie.
+    Comanda 'T': Se verifica daca indexul citit este valid. Daca nu este se
+afiseaza mesajul corespunzator, iar daca este se urmeaza pasii: se aloca o
+noua matrice mat, unde se face transpusa, se interschimba dimensiunile retinute
+in vectorii line si col, se interschimba matricea initiala cu transpusa si se
+elibereaza matricea auxiliara folosita la interschimbare.
+    Comanda 'R': Se apeleaza functia check_power_matrix() unde se citesc indexul
+matricei dorite si puterea la care sa fie ridicata si se verifica daca acesta este
+valid. Daca nu este valid se va afisa mesajul potrivit, iar daca este se face 
+declara o alta matrice in care se copiaza matricea curenta, dupa care in v[index] 
+se returneaza apelul functiei pow_matrix() care returneaza rezultatul exponentirii 
+rapide a matricei cerute, functie ce contine, la randul ei apelul functiei putere()
+care returneaza  produsul a 2 matrice. La final, in prima functie apelata se va 
+elibera matricea ajutatoare.
+    Comanda 'F': Se apeleaza functia free_matrix() care elibereaza matricea dorita
+din memorie, daca nu se poate se va afisa mesajul potrivit.
+    Comanda 'Q': Eliberarea tuturor resurselor, sfarsitul programului.
+    (BONUS) Comanda 'S': (functia strassen_mat()): Inmultirea matricelor folosind
+algoritmul lui Strassen. Se verifica daca se poate realiza operatia. Daca nu, 
+se afiseaza mesaj, daca da, se mareste dimensiunea vectorilor v, line si col 
+prin realocare si se urmeaza pasii:
+1. Alocarea unui nou element cu numarul de linii al primei matrice,
+respectiv numarul de coloane a celei de a doua.
+2*. Elementele noii matrice sunt efectuate dupa regula corespunzatoare.
+* explicarea pasului 2: Elementele vor fi calculate conform algoritmului
+lui strassen pentru inmultirea a doua matrice. In primul rand, algoritmul
+imparte matricea originala in 4 parti egale, urmand sa calculeze fiecare
+"sfert" de matrice. Contributia lui Strassen la acest algoritm este modul
+de a calcula, utilizand niste formule pentru a reduce timpul de executie 
+la 7T(n/2) + O(n^2), prin efectuarea a doar 7 inmulti, fata de 
+algoritmul "naiv" bazat 8 inmultiri, ce in final rezulta in complexitate 
+8T(n/2) + O(n^2). Pasii vor fi:
+a) Daca matricea este redusa pana la dimensiunea de 1, elementul este 
+calculat efectiv. Altfel:
+b) Creerea unei noi matrice rezultante, C, si a noii dimensiuni k = n / 2;
+c) Impartirea in "sferturi" atat a matricelor de inmultit, A si B, cat si
+a matricei rezultante C. Intrucat matricele A si B sunt cunoscute, 
+sferturile acestora le sunt atribuite valorile corespunzatoare, urmand 
+ca la sfarsitul programului sa calculcam valorile sferturilor lui C.
+d) Alocarea unor matrice auxiliare folositoare calcului. Alocarea acestora
+nu ar fi necesara in cazul alocarii statice, putand fi folosite efectiv,
+insa in cadrul alocarii dinamice le retin in variabile pentur a le putea
+elibera memoria aferenta mai tarziu. Mai multe detalii sunt comentate in 
+program la liniile respective.
+e) Alocarea si calcularea produselor auxiliare(aux.M1, aux.M2, etc) prin
+apelarea recursiva a aceleiasi functii, conform algoritmului lui Strassen.
+f) Calcularea sferturilor lui C, dupa formulele corespunzatoare
+(exemplu: C11 = A11 * B11 + A12 * B21)
+g) Eliberarea tuturor matricelor alocate dinamic
+h) Returnarea rezultatului, matricea C.
